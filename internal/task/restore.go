@@ -1,8 +1,8 @@
 package task
 
 import (
-	"github.com/talal/bonclay/internal/core"
-	"github.com/talal/bonclay/internal/file"
+	"github.com/xlshiz/bonclay/internal/core"
+	"github.com/xlshiz/bonclay/internal/file"
 )
 
 // Restore uses 'source:target' pairs defined in the configuration spec to copy

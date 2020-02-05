@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/talal/bonclay/internal/core"
-	"github.com/talal/bonclay/internal/task"
+	"github.com/xlshiz/bonclay/internal/core"
+	"github.com/xlshiz/bonclay/internal/task"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 

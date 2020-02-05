@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/talal/go-bits/color"
+	"github.com/xlshiz/go-bits/color"
 )
 
 const arrow = "-->"
