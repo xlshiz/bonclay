@@ -9,6 +9,11 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
+type GlobFile struct {
+		Dst    string `yaml:"dst"`
+		Filter string `yaml:"filter"`
+}
+
 // Configuration contains all the data from a configuration file.
 type Configuration struct {
 	Backup struct {
@@ -24,6 +29,7 @@ type Configuration struct {
 	// Spec is a map of source to target, where source/target are
 	// the path to a file or a directory.
 	Spec map[string]string `yaml:"spec"`
+	Glob map[string] GlobFile `yaml:"glob"`
 }
 
 // NewConfiguration reads and validates a configuration file.

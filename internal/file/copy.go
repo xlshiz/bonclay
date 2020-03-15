@@ -5,13 +5,46 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/xlshiz/bonclay/internal/core"
 )
 
 // Copy copies a src to dst, where src is either a file or a directory.
 //
 // Directories are copied recursively. if dst already exists then it is
 // overwritten as per the value of overcore.
-func Copy(src, dst string, overwrite bool) error {
+func CopyGlob(src string, dst core.GlobFile, overwrite bool) error {
+	srcAbsPath, err := fullPath(src)
+	if err != nil {
+		return err
+	}
+	dstAbsPath, err := fullPath(dst.Dst)
+	if err != nil {
+		return err
+	}
+	globFiles, err := filepath.Glob(srcAbsPath)
+	if err != nil {
+		return err
+	}
+	for _, v := range globFiles {
+		err := filepath.Walk(v, makeWalkFunc(filepath.Dir(srcAbsPath), dstAbsPath, dst.Filter, overwrite))
+		if err != nil {
+			if err.Error() == "Skip: .." {
+				continue
+			}
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Copy copies a src to dst, where src is either a file or a directory.
+//
+// Directories are copied recursively. if dst already exists then it is
+// overwritten as per the value of overcore.
+func CopySpec(src, dst string, overwrite bool) error {
 	srcAbsPath, err := fullPath(src)
 	if err != nil {
 		return err
@@ -21,10 +54,10 @@ func Copy(src, dst string, overwrite bool) error {
 		return err
 	}
 
-	return filepath.Walk(srcAbsPath, makeWalkFunc(srcAbsPath, dstAbsPath, overwrite))
+	return filepath.Walk(srcAbsPath, makeWalkFunc(srcAbsPath, dstAbsPath, "", overwrite))
 }
 
-func makeWalkFunc(src, dst string, overwrite bool) filepath.WalkFunc {
+func makeWalkFunc(src, dst, filter string, overwrite bool) filepath.WalkFunc {
 	return func(path string, info os.FileInfo, err error) error {
 		// validate source
 		if err != nil {
@@ -38,6 +71,22 @@ func makeWalkFunc(src, dst string, overwrite bool) filepath.WalkFunc {
 		// source should not be a symlink
 		if info.Mode()&os.ModeSymlink != 0 {
 			return &taskError{linkSkip, path}
+		}
+		// filter source
+		if filter != "" {
+			baseFilter := strings.TrimPrefix(path, src)[1:]
+			ifMatch, err := filepath.Match(filter, baseFilter)
+			if err != nil {
+				return err
+			}
+			if ifMatch {
+				if info.Mode().IsDir() {
+					return &taskError{"Skip", ".."}
+				} else {
+					return nil
+				}
+			}
+
 		}
 
 		srcIsDir := info.Mode().IsDir()

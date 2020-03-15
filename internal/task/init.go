@@ -11,20 +11,20 @@ const exampleConfig = `
 # For a detailed description on the different options and how to configure them,
 # refer to the user guide: https://github.com/talal/bonclay/blob/master/doc/guide.md
 backup:
-  overwrite: false
+    overwrite: false
 
 restore:
-  overwrite: false
+    overwrite: false
 
 sync:
-  clean: true
-  overwrite: true
+    clean: true
+    overwrite: true
 
 spec:
-  # ~/examplefile: file
-  # ../../examplefile: ../file
-  # ~/example dir: dir
-  # ../example dir/some other dir: ../new dir
+    # ~/examplefile: file
+    # ../../examplefile: ../file
+    # ~/example dir: dir
+    # ../example dir/some other dir: ../new dir
 `
 
 // Init creates a sample config file (bonclay.conf.yaml) in the current

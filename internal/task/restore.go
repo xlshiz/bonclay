@@ -12,7 +12,7 @@ func Restore(config *core.Configuration) {
 
 	errors := make([]string, 0, len(config.Spec))
 	for dst, src := range config.Spec {
-		err := file.Copy(src, dst, config.Restore.Overwrite)
+		err := file.CopySpec(src, dst, config.Restore.Overwrite)
 		if err != nil {
 			errors = append(errors, err.Error())
 			core.WriteTaskFailure(src, dst)
