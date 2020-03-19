@@ -75,18 +75,20 @@ func makeWalkFunc(src, dst, filter string, overwrite bool) filepath.WalkFunc {
 		// filter source
 		if filter != "" {
 			baseFilter := strings.TrimPrefix(path, src)[1:]
-			ifMatch, err := filepath.Match(filter, baseFilter)
-			if err != nil {
-				return err
-			}
-			if ifMatch {
-				if info.Mode().IsDir() {
-					return &taskError{"Skip", ".."}
-				} else {
-					return nil
+			filterArray := strings.Split(filter, ";")
+			for _, filt := range(filterArray) {
+				ifMatch, err := filepath.Match(filt, baseFilter)
+				if err != nil {
+					return err
+				}
+				if ifMatch {
+					if info.Mode().IsDir() {
+						return &taskError{"Skip", ".."}
+					} else {
+						return nil
+					}
 				}
 			}
-
 		}
 
 		srcIsDir := info.Mode().IsDir()

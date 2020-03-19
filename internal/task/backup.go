@@ -7,7 +7,7 @@ import (
 
 // Backup spec ('source:target' pairs) defined in the configuration spec to copy
 // the sources to the targets.
-func backup_spec(config *core.Configuration) []string {
+func backupSpec(config *core.Configuration) []string {
 	errors := make([]string, 0, len(config.Spec))
 	for src, dst := range config.Spec {
 		err := file.CopySpec(src, dst, config.Backup.Overwrite)
@@ -25,7 +25,7 @@ func backup_spec(config *core.Configuration) []string {
 
 // Backup glob defined in the configuration spec to copy
 // the sources to the targets.
-func backup_glob(config *core.Configuration) []string {
+func backupGlob(config *core.Configuration) []string {
 	errors := make([]string, 0, len(config.Spec))
 	for src, dst := range config.Glob {
 		err := file.CopyGlob(src, dst, config.Backup.Overwrite)
@@ -45,8 +45,9 @@ func backup_glob(config *core.Configuration) []string {
 func Backup(config *core.Configuration) {
 	core.WriteTaskHeader("backup")
 
-	specErrors := backup_spec(config)
-	globErrors := backup_glob(config)
+	specErrors := backupSpec(config)
+	globErrors := backupGlob(config)
+
 	errors := append(specErrors, globErrors...)
 	core.WriteTaskFooter("backup", len(errors) == 0)
 	core.WriteTaskErrors(errors)

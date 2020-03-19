@@ -25,6 +25,14 @@ spec:
     # ../../examplefile: ../file
     # ~/example dir: dir
     # ../example dir/some other dir: ../new dir
+
+glob:
+	# ~/.config/k*:
+	#	dst: config
+	#	filter: konsole
+	# ~/.config/awesome:
+	#	dst: config/awesome
+	#	filter: "*/theme/te*;*/rc.d"
 `
 
 // Init creates a sample config file (bonclay.conf.yaml) in the current
