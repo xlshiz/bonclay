@@ -17,13 +17,13 @@ var (
 	initCmd = app.Command("init", "Create a new config file in the current directory")
 
 	backupCmd     = app.Command("backup", "Backup files/directories to their target location")
-	backupCfgFile = backupCmd.Arg("config-file", "Path to the config file").Required().String()
+	backupCfgFile = backupCmd.Arg("config-file", "Path to the config file").Default("bonclay.yaml").String()
 
 	restoreCmd     = app.Command("restore", "Restore files/directories to their original location")
-	restoreCfgFile = restoreCmd.Arg("config-file", "Path to the config file").Required().String()
+	restoreCfgFile = restoreCmd.Arg("config-file", "Path to the config file").Default("bonclay.yaml").String()
 
 	syncCmd     = app.Command("sync", "Sync files/directories")
-	syncCfgFile = syncCmd.Arg("config-file", "Path to the config file").Required().String()
+	syncCfgFile = syncCmd.Arg("config-file", "Path to the config file").Default("bonclay.yaml").String()
 )
 
 func main() {

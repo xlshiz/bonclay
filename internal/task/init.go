@@ -43,7 +43,7 @@ func Init() {
 		cwd = os.Getenv("PWD")
 	}
 
-	cfgPath := filepath.Join(filepath.Clean(cwd), "bonclay.conf.yaml")
+	cfgPath := filepath.Join(filepath.Clean(cwd), "bonclay.yaml")
 
 	_, err = os.Lstat(cfgPath)
 	if err == nil {
