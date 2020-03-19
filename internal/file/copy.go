@@ -4,6 +4,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/xlshiz/bonclay/internal/core"
@@ -57,9 +58,6 @@ func CopyGlob(src string, dst core.GlobFile, overwrite bool) error {
 	for _, v := range globFiles {
 		err := filepath.Walk(v, makeWalkFunc(filepath.Dir(srcAbsPath), dstAbsPath, dst.Filter, overwrite))
 		if err != nil {
-			if err.Error() == "Skip: .." {
-				continue
-			}
 			return err
 		}
 
@@ -105,16 +103,12 @@ func makeWalkFunc(src, dst, filter string, overwrite bool) filepath.WalkFunc {
 			baseFilter := strings.TrimPrefix(path, src)[1:]
 			filterArray := strings.Split(filter, ";")
 			for _, filt := range(filterArray) {
-				ifMatch, err := filepath.Match(filt, baseFilter)
+				ifMatch, err := regexp.MatchString(filt, baseFilter)
 				if err != nil {
 					return err
 				}
 				if ifMatch {
-					if info.Mode().IsDir() {
-						return &taskError{"Skip", ".."}
-					} else {
-						return nil
-					}
+					return nil
 				}
 			}
 		}

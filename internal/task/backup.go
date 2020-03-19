@@ -35,7 +35,7 @@ func backupGlob(config *core.Configuration) []string {
 			continue
 		}
 
-		core.WriteTaskSuccess(src+" -->filter: "+dst.Filter, dst.Dst)
+		core.WriteTaskSuccess(src+" <-"+dst.Filter+"->", dst.Dst)
 	}
 
 	return errors
