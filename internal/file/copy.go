@@ -9,6 +9,34 @@ import (
 	"github.com/xlshiz/bonclay/internal/core"
 )
 
+// Restore copies a src to dst, where src is either a file or a directory.
+//
+// Directories are copied recursively. if dst already exists then it is
+// overwritten as per the value of overcore.
+func RestoreGlob(src core.GlobFile, dst string, overwrite bool) error {
+	srcAbsPath, err := fullPath(src.Dst)
+	if err != nil {
+		return err
+	}
+	dstAbsPath, err := fullPath(dst)
+	if err != nil {
+		return err
+	}
+	globFiles, err := filepath.Glob(srcAbsPath)
+	if err != nil {
+		return err
+	}
+	for _, v := range globFiles {
+		err := filepath.Walk(v, makeWalkFunc(srcAbsPath, filepath.Dir(dstAbsPath), "", overwrite))
+		if err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
 // Copy copies a src to dst, where src is either a file or a directory.
 //
 // Directories are copied recursively. if dst already exists then it is
