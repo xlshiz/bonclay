@@ -4,22 +4,29 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/xlshiz/go-bits/color"
+	"github.com/fatih/color"
 )
 
 const arrow = "-->"
 
+var (
+	cyan    = color.New(color.FgCyan)
+	green   = color.New(color.FgGreen)
+	red     = color.New(color.FgRed)
+	blue    = color.New(color.FgBlue)
+)
+
 // WriteTaskHeader writes the task header message followed by a new line.
 func WriteTaskHeader(taskName string) {
-	color.Printf(color.Cyan, "bonclay: %s task\n\n", taskName)
+	cyan.Printf("bonclay: %s task\n\n", taskName)
 }
 
 // WriteTaskFooter writes the task footer message followed by a new line.
 func WriteTaskFooter(taskName string, wasSuccessful bool) {
 	if wasSuccessful {
-		color.Printf(color.Green, "\n===> %s Successful\n\n", strings.Title(taskName))
+		green.Printf("\n===> %s Successful\n\n", strings.Title(taskName))
 	} else {
-		color.Printf(color.Red, "\nSome errors occurred during %s:\n", taskName)
+		red.Printf("\nSome errors occurred during %s:\n", taskName)
 	}
 }
 
@@ -36,13 +43,14 @@ func WriteTaskFailure(src, dst string) {
 }
 
 func taskResponse(src, dst string, wasSuccessful bool) {
-	c := color.Green
+	c := green
 	if !wasSuccessful {
-		c = color.Red
+		c = red
 	}
 
-	fmt.Printf("%s %s %s\n", color.Sprintf(color.Blue, src),
-		color.Sprintf(c, arrow), color.Sprintf(color.Blue, dst))
+	blue.Printf("%s ", src)
+	c.Printf("%s ", arrow)
+	blue.Printf("%s\n", dst)
 }
 
 // WriteTaskErrors writes the errors, if any occurred.
